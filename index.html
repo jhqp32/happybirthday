@@ -2704,7 +2704,7 @@
             <form class="guestbook-form" id="guestbookForm">
                 <input type="text" id="guestNameInput" placeholder="Ваше имя" required />
                 <textarea id="guestMessageInput" placeholder="Ваше пожелание..." required></textarea>
-                <button type="submit" class="btn-submit">📝 Отправить</button>
+                <button type="submit" class="btn-submit">📝 ить</button>
             </form>
 
             <div class="guestbook-filters" id="filterButtons">
@@ -2746,7 +2746,7 @@
     <section class="footer">
         <div class="glow-line"></div>
         <h3>До встречи на др</h3>
-        <p>5 июля. Захвати себя, настроение — и можно отправляться. Время уточним отдельно.</p>
+        <p>5 июля. Захвати себя, настроение — и можно ляться. Время уточним отдельно.</p>
         <button class="btn-share" id="shareBtn">📤 Поделиться</button>
         <div class="live-clock" id="liveClock">--:--:--</div>
         <div class="tagline">birthday · beach · 05.07</div>
@@ -2765,6 +2765,7 @@
             { name: "Максимджан", description: "Человек-пиво, который сидит и играет в кс.", photo: "photos/foto24.jpg" },
             { name: "Никитос", description: "Пьёт до конца, пока не уснет.", photo: "photos/foto25.jpg" },
             { name: "Леха Красавчик", description: "Красавчик, который играет в футбол с аурой.", photo: "photos/foto31.jpg" },
+            { name: "Егор Панк", description: "Пишет грустный рэп, дроп на зайцевнет.", photo: "photos/foto28.jpg" },
             { name: "Ромчик Попугай", description: "Дотер-эгоист, у него попугай.", photo: "photos/foto32.jpg" },
             { name: "Артем Работник", description: "Трудоголик, который умеет отдыхать по-крупному.", photo: "photos/foto27.jpg" },
             { name: "Вован Спящий", description: "Тот, кто может уснуть где угодно, но просыпается в самый нужный момент.", photo: "photos/foto26.jpg" },
@@ -3753,7 +3754,7 @@
 
         // ============================================================
         // 28. ГОСТЕВАЯ КНИГА (облачная) с фильтром мата и колонками
-        // + Ограничение: 1 сообщение в час на устройство
+        // + Ограничение: 1 сообщение в 15 минут
         // ============================================================
         const BIN_ID = '6a39bfcada38895dfeee63b0';
         const API_KEY = '$2a$10$WZvqaSxYQ5D3kWVWmqPYn.YgJVAcMZISw4ev1Hsmv7ekOEGvFN.He';
@@ -3838,16 +3839,18 @@
                 return;
             }
 
-            // === ОГРАНИЧЕНИЕ: 1 СООБЩЕНИЕ В ЧАС ===
+            // === ОГРАНИЧЕНИЕ: 1 СООБЩЕНИЕ В 15 МИНУТ ===
             const lastTimeKey = 'lastMessageTime_' + sessionId;
             const lastTime = localStorage.getItem(lastTimeKey);
             const now = Date.now();
             if (lastTime) {
                 const diff = now - parseInt(lastTime);
-                const oneHour = 3600000; // 60 минут в миллисекундах
-                if (diff < oneHour) {
-                    const remainingMinutes = Math.ceil((oneHour - diff) / 60000);
-                    alert(`Вы уже отправляли сообщение. Пожалуйста, подождите ${remainingMinutes} минут до следующей отправки.`);
+                const fifteenMinutes = 15 * 60 * 1000; // 15 минут в миллисекундах
+                if (diff < fifteenMinutes) {
+                    const remainingSeconds = Math.ceil((fifteenMinutes - diff) / 1000);
+                    const minutes = Math.floor(remainingSeconds / 60);
+                    const seconds = remainingSeconds % 60;
+                    alert(`Вы уже отправляли сообщение. Пожалуйста, подождите ${minutes} мин ${seconds} сек до следующей отправки.`);
                     return;
                 }
             }
@@ -4010,7 +4013,7 @@
             loadMessages();
         });
 
-        console.log('📖 Гостевая книга с фильтром мата (включая имя), колонками и ограничением 1 сообщение/час загружена!');
+        console.log('📖 Гостевая книга с фильтром мата (включая имя), колонками и ограничением 1 сообщение/15 минут загружена!');
         console.log('🔥 ДЕНЬ РОЖДЕНИЯ — 5 ИЮЛЯ! Все фишки активированы!');
     </script>
 </body>
