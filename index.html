@@ -128,7 +128,6 @@
             width: 100%;
             height: 100%;
         }
-
         #sparks-canvas {
             position: fixed;
             inset: 0;
@@ -160,9 +159,9 @@
             color: var(--amber);
         }
 
-        /* ===== НЕОНОВАЯ ВЫВЕСКА — теперь шрифт Benzin Bold (с fallback) ===== */
+        /* ===== НЕОНОВАЯ ВЫВЕСКА ===== */
         .neon-sign {
-            font-family: 'Benzin Bold', 'Impact', sans-serif; /* заменён на Benzin Bold */
+            font-family: 'Benzin Bold', 'Impact', sans-serif;
             font-size: clamp(14px, 2.5vw, 30px);
             text-align: center;
             color: #fff;
@@ -640,48 +639,106 @@
             transform: scale(0.95);
         }
 
-        /* ===== ОБЫЧНЫЙ ТАЙМЕР ===== */
+        /* ===== КРАСИВЫЙ ТАЙМЕР (белое свечение, заголовок поменьше) ===== */
         .countdown-section {
             background: var(--bg-2);
-            padding: 30px 20px;
-            border-top: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
+            padding: 40px 20px 50px;
+            border-top: 2px solid var(--line);
+            border-bottom: 2px solid var(--line);
             text-align: center;
-            transition: background 0.5s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 60px rgba(255,255,255,0.05);
+        }
+        .countdown-section .white-glow {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: whitePulse 4s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes whitePulse {
+            0% { opacity: 0.4; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.08); }
         }
         .countdown-section .wrap {
-            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+            padding: 10px 0;
+        }
+        .countdown-title {
+            font-family: 'Benzin Bold', sans-serif;
+            font-size: clamp(14px, 1.8vw, 22px);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.8);
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
         .countdown {
             display: flex;
             justify-content: center;
-            gap: 24px;
+            gap: 30px;
             flex-wrap: wrap;
             font-family: 'Benzin Bold', sans-serif;
+            position: relative;
+            z-index: 1;
         }
         .countdown-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: var(--card);
-            padding: 12px 20px;
-            border-radius: 16px;
-            min-width: 70px;
-            border: 1px solid var(--line);
-            transition: background 0.5s;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(6px);
+            padding: 16px 24px;
+            border-radius: 20px;
+            min-width: 100px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 0 40px rgba(255,255,255,0.06), inset 0 0 20px rgba(255,255,255,0.03);
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .countdown-item:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 0 60px rgba(255,255,255,0.12);
         }
         .countdown-item .num {
-            font-size: 38px;
-            color: var(--fire);
+            font-size: clamp(40px, 8vw, 72px);
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(255,255,255,0.1);
             line-height: 1;
+            letter-spacing: 0.04em;
+            font-weight: 700;
         }
         .countdown-item .label {
-            font-size: 12px;
+            font-size: 14px;
             text-transform: uppercase;
-            color: var(--ink-dim);
-            letter-spacing: 0.1em;
-            margin-top: 4px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.15em;
+            margin-top: 6px;
             font-family: 'Anton', sans-serif;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+        @media (max-width: 600px) {
+            .countdown-item {
+                min-width: 70px;
+                padding: 12px 14px;
+            }
+            .countdown-item .num {
+                font-size: 30px;
+            }
+            .countdown-item .label {
+                font-size: 11px;
+            }
+            .countdown {
+                gap: 16px;
+            }
+            .countdown-title {
+                font-size: 14px;
+                letter-spacing: 0.1em;
+            }
         }
 
         /* ===== СТАТИСТИКА ===== */
@@ -1857,6 +1914,218 @@
             display: block;
         }
 
+        /* ===== ГОСТЕВАЯ КНИГА (с колонками и фильтром мата) ===== */
+        .guestbook-section {
+            background: var(--bg-2);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            transition: background 0.5s;
+        }
+        .guestbook-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .guestbook-form input,
+        .guestbook-form textarea {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-family: 'Anton', sans-serif;
+            font-size: 16px;
+            color: var(--ink);
+            transition: border-color 0.3s;
+        }
+        .guestbook-form input:focus,
+        .guestbook-form textarea:focus {
+            outline: none;
+            border-color: var(--fire);
+        }
+        .guestbook-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .guestbook-form .btn-submit {
+            align-self: flex-start;
+            background: var(--fire);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-family: 'Benzin Bold', sans-serif;
+            font-size: 18px;
+            color: #140a06;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 16px rgba(255, 90, 31, 0.25);
+        }
+        .guestbook-form .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px rgba(255, 90, 31, 0.4);
+        }
+
+        .guestbook-filters {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .guestbook-filters .filter-btn {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-family: 'Anton', sans-serif;
+            font-size: 16px;
+            color: var(--ink-dim);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .guestbook-filters .filter-btn.active {
+            border-color: var(--fire);
+            color: var(--ink);
+            background: rgba(255, 90, 31, 0.15);
+        }
+        .guestbook-filters .filter-btn:hover {
+            border-color: var(--fire);
+            color: var(--ink);
+        }
+
+        /* Контейнер сообщений – сетка в 3–4 колонки */
+        .messages-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1120px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        .message-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 20px 22px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+        .message-card:hover {
+            border-color: var(--fire);
+            box-shadow: 0 4px 20px rgba(255, 90, 31, 0.08);
+        }
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+        .message-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Benzin Bold', sans-serif;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+        .message-meta {
+            flex: 1;
+            min-width: 0;
+        }
+        .message-author {
+            font-family: 'Benzin Bold', sans-serif;
+            font-size: 18px;
+            color: var(--ink);
+            word-break: break-word;
+        }
+        .message-date {
+            font-family: 'Anton', sans-serif;
+            font-size: 13px;
+            color: var(--ink-dim);
+        }
+        .message-text {
+            font-family: 'Anton', sans-serif;
+            font-size: 16px;
+            color: var(--ink);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            word-wrap: break-word;
+            flex: 1;
+        }
+        .message-reactions {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+        .reaction-btn {
+            background: transparent;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            padding: 4px 14px;
+            font-size: 16px;
+            font-family: 'Anton', sans-serif;
+            color: var(--ink-dim);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .reaction-btn:hover {
+            border-color: var(--fire);
+            color: var(--ink);
+            background: rgba(255, 90, 31, 0.08);
+        }
+        .reaction-btn .reaction-count {
+            font-size: 14px;
+        }
+        .reaction-btn.liked {
+            border-color: var(--fire);
+            color: var(--fire);
+        }
+
+        @media (max-width: 600px) {
+            .guestbook-form .btn-submit {
+                align-self: stretch;
+            }
+            .message-card {
+                padding: 16px;
+            }
+            .message-author {
+                font-size: 16px;
+            }
+            .message-text {
+                font-size: 15px;
+            }
+            .messages-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+        @media (min-width: 601px) and (max-width: 900px) {
+            .messages-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 901px) {
+            .messages-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (min-width: 1200px) {
+            .messages-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         /* ===== QR-код и ЧЕК-ЛИСТ ===== */
         .qr-section,
         .checklist-section {
@@ -1932,44 +2201,6 @@
             .checklist-grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .greeting-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 20px;
-        }
-        .greeting-card {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 24px 22px;
-            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-        }
-        .greeting-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--fire);
-            box-shadow: 0 8px 30px rgba(255, 90, 31, 0.1);
-        }
-        .greeting-card .g-author {
-            font-family: 'Benzin Bold', sans-serif;
-            font-size: 20px;
-            color: var(--amber);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .greeting-card .g-author::before {
-            content: "🎤";
-            font-size: 22px;
-        }
-        .greeting-card .g-text {
-            font-family: 'Anton', sans-serif;
-            font-size: 18px;
-            color: var(--ink);
-            line-height: 1.5;
         }
 
         /* ===== FOOTER ===== */
@@ -2104,16 +2335,6 @@
                 padding: 12px;
                 margin: 20px 10px;
             }
-            .countdown {
-                gap: 12px;
-            }
-            .countdown-item {
-                min-width: 60px;
-                padding: 8px 12px;
-            }
-            .countdown-item .num {
-                font-size: 28px;
-            }
             .guest-count-wrap {
                 flex-direction: column;
                 gap: 16px;
@@ -2139,9 +2360,6 @@
                 padding: 8px 16px;
             }
             .fun-grid {
-                grid-template-columns: 1fr;
-            }
-            .greeting-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -2236,14 +2454,28 @@
         </div>
     </section>
 
-    <!-- ОБЫЧНЫЙ ТАЙМЕР -->
+    <!-- ТАЙМЕР С БЕЛЫМ СВЕЧЕНИЕМ И ЗАГОЛОВКОМ ПОМЕНЬШЕ -->
     <section class="countdown-section">
-        <div class="wrap" style="padding: 20px 0;">
+        <div class="white-glow"></div>
+        <div class="wrap" style="padding: 10px 0;">
+            <div class="countdown-title">ДО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ</div>
             <div class="countdown" id="countdown">
-                <div class="countdown-item"><span class="num" id="days">00</span><span class="label">Дней</span></div>
-                <div class="countdown-item"><span class="num" id="hours">00</span><span class="label">Часов</span></div>
-                <div class="countdown-item"><span class="num" id="minutes">00</span><span class="label">Минут</span></div>
-                <div class="countdown-item"><span class="num" id="seconds">00</span><span class="label">Секунд</span></div>
+                <div class="countdown-item">
+                    <span class="num" id="days">00</span>
+                    <span class="label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="num" id="hours">00</span>
+                    <span class="label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="num" id="minutes">00</span>
+                    <span class="label">Минут</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="num" id="seconds">00</span>
+                    <span class="label">Секунд</span>
+                </div>
             </div>
         </div>
     </section>
@@ -2439,7 +2671,7 @@
                 </div>
             </div>
 
-            <!-- Счётчик трезвости (переделан) -->
+            <!-- Счётчик трезвости -->
             <div class="sober-meter">
                 <div class="meter-label">🍺 Счётчик трезвости вечеринки</div>
                 <div class="meter-bar">
@@ -2457,14 +2689,31 @@
                 <span class="eyebrow">частые вопросы</span>
                 <h2>FAQ <span class="flame">вечеринки</span></h2>
             </div>
-            <div class="faq-list" id="faqList">
-                <!-- Вопросы и ответы через JS -->
-            </div>
+            <div class="faq-list" id="faqList"></div>
         </div>
     </section>
 
-    
+    <!-- ===== ГОСТЕВАЯ КНИГА (с колонками и фильтром мата) ===== -->
+    <section class="guestbook-section">
+        <div class="wrap tight">
+            <div class="section-head center reveal">
+                <span class="eyebrow">поздравления</span>
+                <h2>Стена <span class="flame">пожеланий</span></h2>
             </div>
+
+            <form class="guestbook-form" id="guestbookForm">
+                <input type="text" id="guestNameInput" placeholder="Ваше имя" required />
+                <textarea id="guestMessageInput" placeholder="Ваше пожелание..." required></textarea>
+                <button type="submit" class="btn-submit">📝 Отправить</button>
+            </form>
+
+            <div class="guestbook-filters" id="filterButtons">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="today">Сегодня</button>
+                <button class="filter-btn" data-filter="week">Неделя</button>
+            </div>
+
+            <div class="messages-container" id="messagesContainer"></div>
         </div>
     </section>
 
@@ -2489,9 +2738,7 @@
                 <span class="eyebrow">организация</span>
                 <h2>Что я возьму <span class="flame">с собой</span></h2>
             </div>
-            <div class="checklist-grid" id="checklistGrid">
-                <!-- пункты через JS -->
-            </div>
+            <div class="checklist-grid" id="checklistGrid"></div>
         </div>
     </section>
 
@@ -2507,65 +2754,24 @@
 
     <script>
         // ============================================================
-        // 0. ДАННЫЕ ГОСТЕЙ (фотографии из папки photos/)
+        // ДАННЫЕ ГОСТЕЙ
         // ============================================================
-        const guestData = [{
-            name: "Егор Лавелас",
-            description: "Самый надёжный друг, всегда готов прийти на помощь и поддержать любую тусовку. Его энергия заряжает всех вокруг.",
-            photo: "photos/foto22.jpg"
-        }, {
-            name: "Синан MVP",
-            description: "Настоящий MVP наших встреч — он знает, как сделать вечеринку незабываемой. Всегда с хорошим настроением и идеями.",
-            photo: "photos/foto23.jpg"
-        }, {
-            name: "Арсен",
-            description: "Душа компании, который умеет слушать и поддерживать разговор на любую тему. Без него ни одна тусовка не полна.",
-            photo: "photos/foto20.jpg"
-        }, {
-            name: "Арсений Покраска",
-            description: "Творческая личность, которая всегда привносит что-то новое. Его идеи по оформлению вечеринок — просто огонь.",
-            photo: "photos/foto33.jpg"
-        }, {
-            name: "Максимэль Скопец",
-            description: "Мастер кулинарных шедевров. Если вы пробовали его шашлык — вы поймёте, о чём речь. Без него мясо не то.",
-            photo: "photos/foto21.jpg"
-        }, {
-            name: "Максимджан",
-            description: "Человек-праздник, который умеет зажечь даже самую спокойную компанию. Его задор и юмор всегда поднимают настроение.",
-            photo: "photos/foto24.jpg"
-        }, {
-            name: "Никитос",
-            description: "Главный организатор и вдохновитель. Именно он собирает всех вместе и следит, чтобы всё прошло идеально.",
-            photo: "photos/foto25.jpg"
-        }, {
-            name: "Леха Красавчик",
-            description: "Красавчик, который всегда знает, как приодеться и выглядеть на все сто. Настоящий стилист нашей тусовки.",
-            photo: "photos/foto31.jpg"
-        }, {
-            name: "Егор Панк",
-            description: "Бунтарь и рок-музыкант в душе. Его энергия и непредсказуемость делают каждую встречу уникальной.",
-            photo: "photos/foto28.jpg"
-        }, {
-            name: "Ромчик Попугай",
-            description: "Общительный и яркий, как попугай. Он знает всех и вся, а его истории — лучшие на любой вечеринке.",
-            photo: "photos/foto32.jpg"
-        }, {
-            name: "Артем Работник",
-            description: "Трудоголик, который умеет отдыхать по-крупному. На тусовках он раскрывается с совершенно неожиданной стороны.",
-            photo: "photos/foto27.jpg"
-        }, {
-            name: "Вован Спящий",
-            description: "Тот, кто может уснуть где угодно, но просыпается в самый нужный момент, чтобы сказать тост или шутку.",
-            photo: "photos/foto26.jpg"
-        }, {
-            name: "Марк Водка",
-            description: "Главный эксперт по напиткам. Всегда знает, что и когда наливать, чтобы вечеринка удалась на 100%.",
-            photo: "photos/foto29.jpg"
-        }, {
-            name: "Саня Шкода",
-            description: "Проказник и выдумщик, который никогда не даст заскучать. Его шалости — это легенды, которые пересказывают годами.",
-            photo: "photos/foto30.jpg"
-        }];
+        const guestData = [
+            { name: "Егор Лавелас", description: "Пьёт пиво в бесконечных количествах.", photo: "photos/foto22.jpg" },
+            { name: "Синан MVP", description: "Настоящий MVP наших встреч — он знает, как сделать вечеринку незабываемой.", photo: "photos/foto23.jpg" },
+            { name: "Арсен", description: "Душа компании, который умеет слушать и поддерживать разговор на любую тему.", photo: "photos/foto20.jpg" },
+            { name: "Арсений Покраска", description: "Творческая личность, которая делает эдиты лёхе.", photo: "photos/foto33.jpg" },
+            { name: "Максимэль Скопец", description: "Мастер кулинарных шедевров.", photo: "photos/foto21.jpg" },
+            { name: "Максимджан", description: "Человек-пиво, который сидит и играет в кс.", photo: "photos/foto24.jpg" },
+            { name: "Никитос", description: "Пьёт до конца, пока не уснет.", photo: "photos/foto25.jpg" },
+            { name: "Леха Красавчик", description: "Красавчик, который играет в футбол с аурой.", photo: "photos/foto31.jpg" },
+            { name: "Егор Панк", description: "Пишет грустный рэп, дроп на зайцевнет.", photo: "photos/foto28.jpg" },
+            { name: "Ромчик Попугай", description: "Дотер-эгоист, у него попугай.", photo: "photos/foto32.jpg" },
+            { name: "Артем Работник", description: "Трудоголик, который умеет отдыхать по-крупному.", photo: "photos/foto27.jpg" },
+            { name: "Вован Спящий", description: "Тот, кто может уснуть где угодно, но просыпается в самый нужный момент.", photo: "photos/foto26.jpg" },
+            { name: "Марк Водка", description: "Главный эксперт по напиткам. Всегда знает, что и когда наливать.", photo: "photos/foto29.jpg" },
+            { name: "Саня Шкода", description: "Проказник и выдумщик, который никогда не даст заскучать.", photo: "photos/foto30.jpg" }
+        ];
 
         // ============================================================
         // 1. СПИСОК ГОСТЕЙ
@@ -2584,7 +2790,6 @@
                 </div>
                 <div class="guest-pass">VIP</div>
             `;
-            // Клик по карточке — открываем модалку с информацией
             card.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const idx = parseInt(this.dataset.index);
@@ -2621,7 +2826,6 @@
             guestModal.classList.remove('show');
             document.body.style.overflow = '';
         }
-
         guestModalClose.addEventListener('click', closeGuestModal);
         guestModal.addEventListener('click', function(e) {
             if (e.target === this) closeGuestModal();
@@ -2634,7 +2838,7 @@
         // 3. ЧЕРНЫЙ СПИСОК
         // ============================================================
         const blacklist = [
-            "Викуля Дизлайк", "Даня Кук**лд", "Аня Кирпич",
+            "Викуля Дизлайк", "Даня Кук", "Аня Кирпич",
             "Аня Втулка", "Егор без пива", "Арсен с волосами", "Лиза (Егор шарит)", "Люба (Максим шарит)"
         ];
         const blacklistGrid = document.getElementById('blacklistGrid');
@@ -2657,8 +2861,7 @@
         // 4. ЛЕГЕНДЫ
         // ============================================================
         const legends = [
-            { name: "Егор Лавелас", note: "Чаще всех зовут — чаще всех приходит. Без вопросов лучший собутыльник (спасал мне жизнь).",
-                heat: 100 },
+            { name: "Егор Лавелас", note: "Чаще всех зовут — чаще всех приходит.", heat: 100 },
             { name: "Арсен", note: "Всегда рядом, когда движ только разгорается.", heat: 85 },
             { name: "Синан MVP", note: "Депает все бабки.", heat: 70 },
             { name: "Максимджан", note: "Тот, кто не уходит первым — и точка.", heat: 55 },
@@ -2719,7 +2922,6 @@
             modalImg.src = src;
             document.body.style.overflow = 'hidden';
         }
-
         closeModal.addEventListener('click', function() {
             modal.style.display = 'none';
             document.body.style.overflow = '';
@@ -2796,11 +2998,8 @@
             });
         }
 
-        function nextSlide() { goToSlide(currentIndex + 1);
-            resetAutoPlay(); }
-
-        function prevSlide() { goToSlide(currentIndex - 1);
-            resetAutoPlay(); }
+        function nextSlide() { goToSlide(currentIndex + 1); resetAutoPlay(); }
+        function prevSlide() { goToSlide(currentIndex - 1); resetAutoPlay(); }
 
         document.getElementById('nextSlide').addEventListener('click', nextSlide);
         document.getElementById('prevSlide').addEventListener('click', prevSlide);
@@ -2809,26 +3008,23 @@
             stopAutoPlay();
             autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
         }
-
         function stopAutoPlay() {
             if (autoPlayInterval) {
                 clearInterval(autoPlayInterval);
                 autoPlayInterval = null;
             }
         }
-
         function resetAutoPlay() {
             stopAutoPlay();
             startAutoPlay();
         }
-
         const sliderContainer = document.getElementById('sliderContainer');
         sliderContainer.addEventListener('mouseenter', stopAutoPlay);
         sliderContainer.addEventListener('mouseleave', startAutoPlay);
         startAutoPlay();
 
         // ============================================================
-        // 8. ОБЫЧНЫЙ ТАЙМЕР
+        // 8. ОБЫЧНЫЙ ТАЙМЕР (обновление)
         // ============================================================
         function updateCountdown() {
             const now = new Date();
@@ -2850,7 +3046,6 @@
             document.getElementById('hours').textContent = String(hours).padStart(2, '0');
             document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-            // обновляем статистику дней
             const daysStat = document.getElementById('daysStat');
             if (daysStat) daysStat.textContent = days;
         }
@@ -2858,7 +3053,7 @@
         setInterval(updateCountdown, 1000);
 
         // ============================================================
-        // 9. ИСКРЫ ОТ КОСТРА (fire-sparks canvas)
+        // 9. ИСКРЫ ОТ КОСТРА (canvas)
         // ============================================================
         const fireCanvas = document.getElementById('fire-sparks');
         const fCtx = fireCanvas.getContext('2d');
@@ -2920,7 +3115,7 @@
         drawFireSparks();
 
         // ============================================================
-        // 10. ОСТАЛЬНЫЕ ИСКРЫ (sparks-canvas) и КОНФЕТТИ (из предыдущих версий)
+        // 10. ОСТАЛЬНЫЕ ИСКРЫ и КОНФЕТТИ
         // ============================================================
         const canvasSparks = document.getElementById('sparks-canvas');
         const ctxSparks = canvasSparks.getContext('2d');
@@ -2998,9 +3193,7 @@
 
         function createConfettiBurst() {
             confettiParticles = [];
-            const colors = ['#ff5a1f', '#ffb400', '#ff1b3d', '#ff7a3a', '#ffcc44', '#00d4ff', '#ff6b8a', '#7bed9f', '#fffa65',
-                '#a29bfe'
-            ];
+            const colors = ['#ff5a1f', '#ffb400', '#ff1b3d', '#ff7a3a', '#ffcc44', '#00d4ff', '#ff6b8a', '#7bed9f', '#fffa65', '#a29bfe'];
             const count = 120;
             for (let i = 0; i < count; i++) {
                 confettiParticles.push({
@@ -3107,7 +3300,7 @@
         });
 
         // ============================================================
-        // 13. КНОПКА "Я ПОЙДУ" (одноразовая)
+        // 13. КНОПКА "Я ПОЙДУ"
         // ============================================================
         const goBtn = document.getElementById('goBtn');
         let confirmedCount = parseInt(localStorage.getItem('confirmedCount')) || 0;
@@ -3142,7 +3335,6 @@
                 alert('Уже 20 человек подтвердили! Мы будем рады, но мест больше нет.');
             }
         });
-
         updateConfirmed();
 
         // ============================================================
@@ -3195,9 +3387,7 @@
         // ============================================================
         // 16. ЛЕТАЮЩИЕ ЗНАКИ ВОПРОСА
         // ============================================================
-        const hintTexts = [
-            "?", "?", "?", "?", "?", "?", "?", "?", "?", "?"
-        ];
+        const hintTexts = ["?", "?", "?", "?", "?", "?", "?", "?", "?", "?"];
         const container = document.getElementById('hintWordsContainer');
         const wordElements = [];
 
@@ -3302,7 +3492,7 @@
         });
 
         // ============================================================
-        // 20. АНИМИРОВАННАЯ СТАТИСТИКА (счётчики)
+        // 20. АНИМИРОВАННАЯ СТАТИСТИКА
         // ============================================================
         const statNumbers = document.querySelectorAll('.stat-number[data-target]');
         const statObserver = new IntersectionObserver((entries) => {
@@ -3315,7 +3505,6 @@
                 }
             });
         }, { threshold: 0.5 });
-
         statNumbers.forEach(el => statObserver.observe(el));
 
         function animateNumber(el, target) {
@@ -3331,25 +3520,10 @@
             }, 20);
         }
 
-        const daysStat = document.getElementById('daysStat');
-        const confirmedStat = document.getElementById('confirmedStat');
-        if (daysStat) {
-            const now = new Date();
-            let target = new Date(now.getFullYear(), 6, 5);
-            if (now > target) target.setFullYear(target.getFullYear() + 1);
-            const diff = target - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            daysStat.textContent = days > 0 ? days : 0;
-        }
-        if (confirmedStat) {
-            confirmedStat.textContent = confirmedCount;
-        }
-
         // ============================================================
         // 21. КНОПКА "НАВЕРХ"
         // ============================================================
         const btnUp = document.getElementById('btnUp');
-
         window.addEventListener('scroll', function() {
             if (window.scrollY > 300) {
                 btnUp.classList.add('show');
@@ -3357,7 +3531,6 @@
                 btnUp.classList.remove('show');
             }
         });
-
         btnUp.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -3382,7 +3555,6 @@
                 qrContainer.innerHTML = '<p style="color:var(--ink-dim);">QR-код не может быть сгенерирован</p>';
             }
         }
-
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             generateQR();
         } else {
@@ -3393,20 +3565,12 @@
         // 23. ЧЕК-ЛИСТ
         // ============================================================
         const checklistItems = [
-            "Шампуры",
-            "Мясо (курица, свинина)",
-            "Овощи для шашлыка",
-            "Хлеб / лаваш",
-            "Соусы и специи",
-            "Пледы / покрывала",
-            "Портативная колонка",
-            "Напитки (вода, сок, пиво)",
-            "Одноразовая посуда",
-            "Влажные салфетки",
-            "Мусорные пакеты",
+            "Шампуры", "Мясо (курица, свинина)", "Овощи для шашлыка",
+            "Хлеб / лаваш", "Соусы и специи", "Пледы / покрывала",
+            "Портативная колонка", "Напитки (вода, сок, пиво)",
+            "Одноразовая посуда", "Влажные салфетки", "Мусорные пакеты",
             "Зажигалка / спички"
         ];
-
         const checklistGrid = document.getElementById('checklistGrid');
         const savedChecklist = JSON.parse(localStorage.getItem('checklist')) || {};
 
@@ -3458,12 +3622,7 @@
         // ============================================================
         // 25. ГЕНЕРАТОРЫ ОТМАЗОК И ТОСТОВ
         // ============================================================
-        const excuses = [
-            "неа.",
-            "ты придешь."
-        ];
-
-        // ===== НОВЫЕ ТОСТЫ =====
+        const excuses = ["неа.", "ты придешь."];
         const toasts = [
             "За успех! Рома, будь всегда на шаг впереди своих конкурентов и на два шага ближе к своим мечтам. За твой успех!",
             "За три «Д»! Пью за то, чтобы у тебя, Рома, всегда были огромные Деньги, бешеное Движение вперед и верные Друзья!",
@@ -3492,7 +3651,6 @@
             miniModalElem.classList.remove('show');
             document.body.style.overflow = '';
         }
-
         miniCloseElem.addEventListener('click', closeMiniModal);
         miniCloseBtnElem.addEventListener('click', closeMiniModal);
         miniModalElem.addEventListener('click', function(e) {
@@ -3502,9 +3660,7 @@
             if (e.key === 'Escape' && miniModalElem.classList.contains('show')) closeMiniModal();
         });
 
-        let lastExcuse = '';
-        let lastToast = '';
-
+        let lastExcuse = '', lastToast = '';
         document.getElementById('excuseBtn').addEventListener('click', function() {
             let randomExcuse;
             do {
@@ -3513,7 +3669,6 @@
             lastExcuse = randomExcuse;
             showMiniModal('🙈 Отмазка дня', randomExcuse);
         });
-
         document.getElementById('toastBtn').addEventListener('click', function() {
             let randomToast;
             do {
@@ -3524,7 +3679,7 @@
         });
 
         // ============================================================
-        // 26. СЧЁТЧИК ТРЕЗВОСТИ (переделан)
+        // 26. СЧЁТЧИК ТРЕЗВОСТИ
         // ============================================================
         const meterFill = document.getElementById('meterFill');
         const meterStatus = document.getElementById('meterStatus');
@@ -3532,27 +3687,21 @@
         function updateSoberMeter() {
             const now = new Date();
             const year = now.getFullYear();
-            // Начало: 5 июля 13:00
             const start = new Date(year, 6, 5, 13, 0, 0);
-            // Конец: 6 июля 11:00
             const end = new Date(year, 6, 6, 11, 0, 0);
-
             let progress = 0;
             if (now < start) {
-                progress = 1; // 100% до начала
+                progress = 1;
             } else if (now >= start && now <= end) {
-                const total = end - start; // 22 часа
+                const total = end - start;
                 const elapsed = now - start;
                 progress = 1 - (elapsed / total);
                 if (progress < 0) progress = 0;
             } else {
-                progress = 0; // после окончания 0%
+                progress = 0;
             }
-
             const percent = Math.round(progress * 100);
             meterFill.style.width = percent + '%';
-
-            // Статусы
             const statuses = [
                 { max: 0, text: '🍾 Всё, пора спать...' },
                 { max: 20, text: '🧊 Почти трезво' },
@@ -3565,43 +3714,29 @@
             let statusText = statuses.find(s => percent <= s.max) || statuses[statuses.length - 1];
             meterStatus.textContent = statusText.text + ' (' + percent + '%)';
         }
-
         updateSoberMeter();
         setInterval(updateSoberMeter, 5000);
 
         // ============================================================
         // 27. FAQ
         // ============================================================
-        const faqData = [{
-            q: 'Где именно будет проходить вечеринка?',
-            a: 'На пляже, точное место уточняйте у организатора. Будет шатёр и зона для костра.'
-        }, {
-            q: 'Что нужно брать с собой?',
-            a: 'Хорошее настроение, удобную одежду, плед (если холодно). Всё остальное (еда, напитки, посуда) будет на месте – смотрите чек-лист.'
-        }, {
-            q: 'Можно ли привести с собой друзей?',
-            a: 'Конечно! Главное – предупредить организатора, чтобы всё учесть.'
-        }, {
-            q: 'Будет ли музыка?',
-            a: 'Да, будет колонка, а также живое выступление секретного гостя!'
-        }, {
-            q: 'До скольки будем тусоваться?',
-            a: 'Пока горит костёр и есть желание – минимум до полуночи, а дальше по обстоятельствам.'
-        }];
-
+        const faqData = [
+            { q: 'Где именно будет проходить вечеринка?', a: 'На пляже, точное место уточняйте у организатора. Будет шатёр и зона для костра.' },
+            { q: 'Что нужно брать с собой?', a: 'Хорошее настроение, удобную одежду, плед (если холодно). Всё остальное (еда, напитки, посуда) будет на месте – смотрите чек-лист.' },
+            { q: 'Можно ли привести с собой друзей?', a: 'Конечно! Главное – предупредить организатора, чтобы всё учесть.' },
+            { q: 'Будет ли музыка?', a: 'Да, будет колонка, а также живое выступление секретного гостя!' },
+            { q: 'До скольки будем тусоваться?', a: 'Пока горит костёр и есть желание – минимум до полуночи, а дальше по обстоятельствам.' }
+        ];
         const faqList = document.getElementById('faqList');
-
         faqData.forEach((item, index) => {
             const faqItem = document.createElement('div');
             faqItem.className = 'faq-item';
             const question = document.createElement('div');
             question.className = 'faq-question';
-            question.innerHTML =
-                `<span>${item.q}</span><span class="faq-arrow">▼</span>`;
+            question.innerHTML = `<span>${item.q}</span><span class="faq-arrow">▼</span>`;
             const answer = document.createElement('div');
             answer.className = 'faq-answer';
             answer.textContent = item.a;
-
             question.addEventListener('click', function() {
                 const isOpen = faqItem.classList.contains('open');
                 document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
@@ -3609,34 +3744,275 @@
                     faqItem.classList.add('open');
                 }
             });
-
             faqItem.appendChild(question);
             faqItem.appendChild(answer);
             faqList.appendChild(faqItem);
         });
-
         if (faqList.firstChild) {
             faqList.firstChild.classList.add('open');
         }
 
         // ============================================================
-        
-        const greetingGrid = document.getElementById('greetingGrid');
+        // 28. ГОСТЕВАЯ КНИГА (облачная) с фильтром мата и колонками
+        // + Ограничение: 1 сообщение в час на устройство
+        // ============================================================
+        const BIN_ID = '6a39bfcada38895dfeee63b0';
+        const API_KEY = '$2a$10$WZvqaSxYQ5D3kWVWmqPYn.YgJVAcMZISw4ev1Hsmv7ekOEGvFN.He';
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        greetings.forEach((g) => {
-            const card = document.createElement('div');
-            card.className = 'greeting-card';
-            card.innerHTML = `
-                <div class="g-author">${g.name}</div>
-                <div class="g-text">${g.text}</div>
-            `;
-            greetingGrid.appendChild(card);
+        // Список запрещённых слов (маты, оскорбления) – можно дополнять
+        const badWords = [
+            'бля', 'блять', 'хуй', 'хуя', 'пизд', 'пизда', 'пиздец',
+            'ебал', 'ебать', 'ебли', 'заеб', 'нахуй', 'похуй',
+            'мудак', 'уёбок', 'сука', 'сучка', 'тварь',
+            'fuck', 'shit', 'asshole', 'bitch', 'cunt', 'dick',
+            'говно', 'гнида', 'редиска', 'скотина', 'пидр', 'пидор', 'пидар', 'пидарас',
+            'пидорас', 'хуесос', 'чмо', 'лох', 'гандон', 'гондон', 'шлюха'
+        ];
+
+        // Функция проверки на запрещённые слова
+        function containsBadWord(text) {
+            const clean = text.toLowerCase().replace(/[^а-яёa-z0-9]/g, ' ');
+            const words = clean.split(/\s+/);
+            return words.some(word => badWords.some(bad => word.includes(bad)));
+        }
+
+        let sessionId = localStorage.getItem('sessionId');
+        if (!sessionId) {
+            sessionId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('sessionId', sessionId);
+        }
+
+        let messages = [];
+        let currentFilter = 'all';
+
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${API_URL}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if (!response.ok) throw new Error('Ошибка загрузки');
+                const data = await response.json();
+                let loaded = data.record?.messages || [];
+                loaded = loaded.map(msg => {
+                    if (!msg.reactedHeart) msg.reactedHeart = [];
+                    if (!msg.reactedParty) msg.reactedParty = [];
+                    return msg;
+                });
+                messages = loaded;
+                if (!data.record?.messages) {
+                    await saveMessages();
+                }
+                renderMessages(currentFilter);
+            } catch (error) {
+                console.error('Ошибка загрузки сообщений:', error);
+                messages = [];
+                renderMessages(currentFilter);
+            }
+        }
+
+        async function saveMessages() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ messages })
+                });
+                if (!response.ok) throw new Error('Ошибка сохранения');
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                alert('Не удалось сохранить сообщение. Попробуйте позже.');
+            }
+        }
+
+        async function addMessage(name, text) {
+            // Проверка на мат в имени и тексте
+            if (containsBadWord(name) || containsBadWord(text)) {
+                alert('Имя или сообщение содержат запрещённые слова. Пожалуйста, отредактируйте.');
+                return;
+            }
+            if (name.trim() === '' || text.trim() === '') {
+                alert('Заполните имя и сообщение.');
+                return;
+            }
+
+            // === ОГРАНИЧЕНИЕ: 1 СООБЩЕНИЕ В ЧАС ===
+            const lastTimeKey = 'lastMessageTime_' + sessionId;
+            const lastTime = localStorage.getItem(lastTimeKey);
+            const now = Date.now();
+            if (lastTime) {
+                const diff = now - parseInt(lastTime);
+                const oneHour = 3600000; // 60 минут в миллисекундах
+                if (diff < oneHour) {
+                    const remainingMinutes = Math.ceil((oneHour - diff) / 60000);
+                    alert(`Вы уже отправляли сообщение. Пожалуйста, подождите ${remainingMinutes} минут до следующей отправки.`);
+                    return;
+                }
+            }
+            // ========================================
+
+            const newMsg = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+                name: name.trim(),
+                text: text.trim(),
+                timestamp: new Date().toISOString(),
+                reactions: { heart: 0, party: 0 },
+                reactedHeart: [],
+                reactedParty: []
+            };
+            messages.push(newMsg);
+            await saveMessages();
+
+            // Сохраняем время отправки
+            localStorage.setItem(lastTimeKey, String(now));
+
+            renderMessages(currentFilter);
+        }
+
+        async function addReaction(id, type) {
+            const msg = messages.find(m => m.id === id);
+            if (!msg) return;
+            const hasHeart = msg.reactedHeart.includes(sessionId);
+            const hasParty = msg.reactedParty.includes(sessionId);
+
+            if (type === 'heart') {
+                if (hasHeart) {
+                    msg.reactedHeart = msg.reactedHeart.filter(id => id !== sessionId);
+                    msg.reactions.heart--;
+                } else {
+                    if (hasParty) {
+                        msg.reactedParty = msg.reactedParty.filter(id => id !== sessionId);
+                        msg.reactions.party--;
+                    }
+                    msg.reactedHeart.push(sessionId);
+                    msg.reactions.heart++;
+                }
+            } else if (type === 'party') {
+                if (hasParty) {
+                    msg.reactedParty = msg.reactedParty.filter(id => id !== sessionId);
+                    msg.reactions.party--;
+                } else {
+                    if (hasHeart) {
+                        msg.reactedHeart = msg.reactedHeart.filter(id => id !== sessionId);
+                        msg.reactions.heart--;
+                    }
+                    msg.reactedParty.push(sessionId);
+                    msg.reactions.party++;
+                }
+            }
+            await saveMessages();
+            renderMessages(currentFilter);
+        }
+
+        function renderMessages(filter) {
+            const container = document.getElementById('messagesContainer');
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const weekAgo = new Date(todayStart);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            let filtered = messages.slice().reverse();
+            if (filter === 'today') {
+                filtered = filtered.filter(m => new Date(m.timestamp) >= todayStart);
+            } else if (filter === 'week') {
+                filtered = filtered.filter(m => new Date(m.timestamp) >= weekAgo);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--ink-dim); font-family:\'Anton\',sans-serif; font-size:18px; grid-column:1/-1;">Пока нет сообщений. Будь первым! 🎉</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = 'message-card';
+                const avatarColor = getRandomColor(msg.name);
+                const initials = msg.name.charAt(0).toUpperCase();
+                const date = new Date(msg.timestamp);
+                const dateStr = date.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const userHasHeart = msg.reactedHeart.includes(sessionId);
+                const userHasParty = msg.reactedParty.includes(sessionId);
+                const heartActive = userHasHeart ? 'liked' : '';
+                const partyActive = userHasParty ? 'liked' : '';
+
+                card.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-avatar" style="background:${avatarColor};">${initials}</div>
+                        <div class="message-meta">
+                            <div class="message-author">${msg.name}</div>
+                            <div class="message-date">${dateStr}</div>
+                        </div>
+                    </div>
+                    <div class="message-text">${msg.text}</div>
+                    <div class="message-reactions">
+                        <button class="reaction-btn ${heartActive}" data-id="${msg.id}" data-type="heart">
+                            ❤️ <span class="reaction-count">${msg.reactions.heart}</span>
+                        </button>
+                        <button class="reaction-btn ${partyActive}" data-id="${msg.id}" data-type="party">
+                            🎉 <span class="reaction-count">${msg.reactions.party}</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.querySelectorAll('.reaction-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    addReaction(this.dataset.id, this.dataset.type);
+                });
+            });
+        }
+
+        function getRandomColor(name) {
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const hue = Math.abs(hash) % 360;
+            return `hsl(${hue}, 70%, 55%)`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('guestbookForm');
+            const nameInput = document.getElementById('guestNameInput');
+            const messageInput = document.getElementById('guestMessageInput');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = nameInput.value.trim();
+                const text = messageInput.value.trim();
+                if (!name || !text) return;
+                addMessage(name, text);
+                nameInput.value = '';
+                messageInput.value = '';
+            });
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderMessages(currentFilter);
+                });
+            });
+
+            loadMessages();
         });
 
+        console.log('📖 Гостевая книга с фильтром мата (включая имя), колонками и ограничением 1 сообщение/час загружена!');
         console.log('🔥 ДЕНЬ РОЖДЕНИЯ — 5 ИЮЛЯ! Все фишки активированы!');
-        console.log('🍻 Новые тосты для именинника загружены!');
-       
     </script>
-
 </body>
 </html>
